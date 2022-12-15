@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID, Length } from 'class-validator';
 
-export class CreateNotificationBody {
+class NotificationDTO {
   @IsUUID('all', { message: 'Formato de ID inválido!' })
   @IsNotEmpty({ message: 'ID do destinatário não pode ser vazio!' })
   recipientId: string;
@@ -18,3 +18,5 @@ export class CreateNotificationBody {
   @IsNotEmpty({ message: 'Categoria da notificação não pode ser vazia!' })
   category: string;
 }
+
+export { NotificationDTO };
