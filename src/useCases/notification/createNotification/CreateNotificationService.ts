@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { NotificationDTO } from '../../../http/dtos/NotificationDTO';
-import { DefaultNotificationRepository } from '../../../repositories/DefaultNotificationRepository';
-import { Notification } from '../../../models/Notification';
-import { Content } from '../../../models/Content';
+import { NotificationDTO } from '@http/dtos/NotificationDTO';
+import { DefaultNotificationRepository } from '@repositories/DefaultNotificationRepository';
+import { Notification } from '@models/Notification';
+import { Content } from '@models/Content';
 
 @Injectable()
 class CreateNotificationService {

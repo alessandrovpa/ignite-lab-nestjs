@@ -18,6 +18,15 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "paths": {
+      "@database/*": ["./src/database/*"],
+      "@http/*": ["./src/http/*"],
+      "@models/*": ["./src/models/*"],
+      "@repositories/*": ["./src/repositories/*"],
+      "@useCases/*": ["./src/useCases/*"],
+      "@test/*": ["./test/*"]
+    }
   }
 }

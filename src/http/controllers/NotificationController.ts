@@ -1,6 +1,7 @@
 import { Body, Controller, Injectable, Post } from '@nestjs/common';
 import { NotificationDTO } from '../dtos/NotificationDTO';
-import { CreateNotificationService } from '../../useCases/notification/createNotification/CreateNotificationService';
+import { CreateNotificationService } from '@useCases/notification/createNotification/CreateNotificationService';
+import { HTTPNotificationMapper } from '@http/view/HTTPNotificationMapper';
 
 @Controller('/notification')
 @Injectable()
@@ -19,7 +20,7 @@ class NotificationController {
       category,
     });
 
-    return notification;
+    return HTTPNotificationMapper.toHTTP(notification);
   }
 }
 

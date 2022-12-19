@@ -6,8 +6,36 @@ class InMemoryNotificationRepository implements DefaultNotificationRepository {
   constructor() {
     this.notifications = [];
   }
+
+  async findById(notificationId: string): Promise<Notification | null> {
+    const notification = await this.notifications.find(
+      (notification) => notification.id === notificationId,
+    );
+
+    if (!notification) {
+      return null;
+    }
+
+    return notification;
+  }
+
+  async save(notification: Notification): Promise<void> {
+    const notificationIndex = this.notifications.findIndex(
+      (actualNotification) => actualNotification.id === notification.id,
+    );
+    this.notifications[notificationIndex] = notification;
+  }
+
   async create(notification: Notification): Promise<void> {
     this.notifications.push(notification);
+  }
+
+  async countRecipientNotifications(recipientId: string): Promise<number> {
+    const notificationsByRecipientId = await this.notifications.filter(
+      (notification) => notification.recipientId === recipientId,
+    );
+
+    return notificationsByRecipientId.length;
   }
 }
 

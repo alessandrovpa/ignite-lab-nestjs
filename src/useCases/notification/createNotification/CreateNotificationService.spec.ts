@@ -1,5 +1,5 @@
 import { CreateNotificationService } from './CreateNotificationService';
-import { InMemoryNotificationRepository } from '../../../../test/repositories/InMemoryNotificationRepository';
+import { InMemoryNotificationRepository } from '@test/repositories/InMemoryNotificationRepository';
 
 describe('CreateNotificationService', () => {
   it('should be able to create a new notification', async () => {
