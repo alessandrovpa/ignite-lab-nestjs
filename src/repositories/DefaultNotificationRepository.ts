@@ -5,6 +5,9 @@ abstract class DefaultNotificationRepository {
   abstract findById(notificationId: string): Promise<Notification | null>;
   abstract save(notification: Notification): Promise<void>;
   abstract countRecipientNotifications(recipientId: string): Promise<number>;
+  abstract listNotificationsByRecipientId(
+    recipientId: string,
+  ): Promise<Notification[]>;
 }
 
 export { DefaultNotificationRepository };

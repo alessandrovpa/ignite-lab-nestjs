@@ -37,6 +37,15 @@ class InMemoryNotificationRepository implements DefaultNotificationRepository {
 
     return notificationsByRecipientId.length;
   }
+
+  async listNotificationsByRecipientId(
+    recipientId: string,
+  ): Promise<Notification[]> {
+    const notifications = this.notifications.filter(
+      (notification) => notification.recipientId === recipientId,
+    );
+    return notifications;
+  }
 }
 
 export { InMemoryNotificationRepository };

@@ -10,17 +10,25 @@ interface INotification {
   createdAt: Date;
 }
 
+interface IConstructorNotification {
+  id?: string;
+  recipientId: string;
+  content: Content;
+  category: string;
+  readAt?: Date | null;
+  canceledAt?: Date | null;
+  createdAt?: Date;
+}
+
 class Notification {
   private _id: string;
   private props: INotification;
 
-  public constructor(
-    props: Omit<INotification, 'readAt' | 'createdAt' | 'canceledAt'>,
-  ) {
-    const createdAt = new Date();
-    const canceledAt = null;
-    const readAt = null;
-    this._id = randomUUID();
+  public constructor(props: IConstructorNotification) {
+    const createdAt = props.createdAt ? props.createdAt : new Date();
+    const canceledAt = props.createdAt ? props.canceledAt : null;
+    const readAt = props.readAt ? props.readAt : null;
+    this._id = props.id ? props.id : randomUUID();
     this.props = {
       createdAt,
       readAt,
@@ -55,7 +63,7 @@ class Notification {
   }
 
   public read(): void {
-    this.props.readAt = new Date();
+    this.props.readAt = this.props.readAt ? this.props.readAt : new Date();
   }
   public unread(): void {
     this.props.readAt = null;
@@ -65,7 +73,9 @@ class Notification {
   }
 
   public cancel(): void {
-    this.props.canceledAt = new Date();
+    this.props.canceledAt = this.props.canceledAt
+      ? this.props.canceledAt
+      : new Date();
   }
   public get canceledAt(): Date | null | undefined {
     return this.props.canceledAt;

@@ -14,8 +14,9 @@ class NotificationRepository implements DefaultNotificationRepository {
   }
 
   async save(notification: Notification): Promise<void> {
+    const prismaNotification = PrismaNotificationMapper.toPrisma(notification);
     await this.prismaService.notification.update({
-      data: notification,
+      data: prismaNotification,
       where: {
         id: notification.id,
       },
@@ -23,13 +24,46 @@ class NotificationRepository implements DefaultNotificationRepository {
   }
 
   async findById(notificationId: string): Promise<Notification | null> {
-    const notification = await this.prismaService.notification.findUnique({
+    const prismaNotification = await this.prismaService.notification.findUnique(
+      {
+        where: {
+          id: notificationId,
+        },
+      },
+    );
+
+    if (!prismaNotification) return null;
+
+    const notification = PrismaNotificationMapper.toModel(prismaNotification);
+
+    return notification;
+  }
+
+  async countRecipientNotifications(recipientId: string): Promise<number> {
+    const count = await this.prismaService.notification.count({
       where: {
-        id: notificationId,
+        recipientId,
       },
     });
 
-    return notification;
+    return count;
+  }
+
+  async listNotificationsByRecipientId(
+    recipientId: string,
+  ): Promise<Notification[]> {
+    const notifications = await this.prismaService.notification.findMany({
+      where: {
+        recipientId,
+        readAt: null,
+        canceledAt: null,
+      },
+    });
+    const modelNotifications = notifications.map((notification) =>
+      PrismaNotificationMapper.toModel(notification),
+    );
+
+    return modelNotifications;
   }
 }
 
