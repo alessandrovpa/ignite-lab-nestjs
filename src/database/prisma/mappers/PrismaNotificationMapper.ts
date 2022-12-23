@@ -11,6 +11,7 @@ class PrismaNotificationMapper {
       recipientId: notification.recipientId,
       createdAt: notification.createdAt,
       readAt: notification.readAt,
+      canceledAt: notification.canceledAt,
     };
   }
 

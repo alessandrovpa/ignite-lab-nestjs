@@ -43,6 +43,8 @@ class NotificationRepository implements DefaultNotificationRepository {
     const count = await this.prismaService.notification.count({
       where: {
         recipientId,
+        canceledAt: null,
+        readAt: null,
       },
     });
 
