@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NotificationDTO } from '@http/dtos/NotificationDTO';
+import { CreateNotificationDTO } from '@http/dtos/CreateNotificationDTO';
 import { DefaultNotificationRepository } from '@repositories/DefaultNotificationRepository';
 import { Notification } from '@models/Notification';
 import { Content } from '@models/Content';
@@ -14,7 +14,7 @@ class CreateNotificationService {
     recipientId,
     content,
     category,
-  }: NotificationDTO): Promise<Notification> {
+  }: CreateNotificationDTO): Promise<Notification> {
     const notification = new Notification({
       recipientId,
       category,

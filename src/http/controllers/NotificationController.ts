@@ -6,20 +6,18 @@ import {
   Patch,
   Param,
   Get,
-  Query,
 } from '@nestjs/common';
-import { NotificationDTO } from '../dtos/NotificationDTO';
+import { CreateNotificationDTO } from '../dtos/CreateNotificationDTO';
 import { CreateNotificationService } from '@useCases/notification/createNotification/CreateNotificationService';
 import { HTTPNotificationMapper } from '@http/view/HTTPNotificationMapper';
 import { CancelNotificationService } from '@useCases/notification/cancelNotification/CancelNotificationService';
 import { CountRecipientNotificationService } from '@useCases/notification/countRecipientNotification/CountRecipientNotificationService';
 import { ListAvaiablesNotificationsService } from '@useCases/notification/listAvaiablesNotifications/ListAvaiablesNotificationsService';
 import { ReadNotificationService } from '@useCases/notification/readNotification/ReadNotificationService';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-interface RequestDTO {
-  id: string;
-}
 @Controller('/notification')
+@ApiTags('notification')
 @Injectable()
 class NotificationController {
   constructor(
@@ -31,8 +29,12 @@ class NotificationController {
   ) {}
 
   @Post()
-  async create(@Body() body: NotificationDTO) {
-    const { recipientId, content, category } = body;
+  @ApiResponse({
+    status: 200,
+    description: 'Notification created successfully',
+  })
+  async create(@Body() createDTO: CreateNotificationDTO) {
+    const { recipientId, content, category } = createDTO;
 
     const notification = await this.createNotificationService.execute({
       recipientId,
@@ -43,22 +45,24 @@ class NotificationController {
     return HTTPNotificationMapper.toHTTP(notification);
   }
 
-  @Patch('/cancel/:id')
-  async cancelNotification(@Param() { id }: RequestDTO) {
+  @Patch('/:id/cancel')
+  async cancelNotification(@Param('id') id: string) {
     const canceledNotification = await this.cancelNotificationService.execute(
       id,
     );
     return HTTPNotificationMapper.toHTTP(canceledNotification);
   }
 
-  @Patch('/read/:id')
-  async readNotification(@Param() { id }: RequestDTO) {
+  @Patch('/:id/read')
+  async readNotification(@Param('id') id: string) {
     const readedNotification = await this.readNotificationService.execute(id);
     return HTTPNotificationMapper.toHTTP(readedNotification);
   }
 
-  @Get()
-  async listAvaiableNotificationsByRecipientId(@Query() { id }: RequestDTO) {
+  @Get('/:recipientid/list')
+  async listAvaiableNotificationsByRecipientId(
+    @Param('recipientid') id: string,
+  ) {
     const avaiablesNotifications =
       await this.listAvaiablesNotificationsService.execute(id);
     const HTTPAvaiablesNotifications = avaiablesNotifications.map(
@@ -67,8 +71,8 @@ class NotificationController {
     return HTTPAvaiablesNotifications;
   }
 
-  @Get('/count')
-  async countRecipientNotifications(@Query() { id }: RequestDTO) {
+  @Get('/:recipientid/count')
+  async countRecipientNotifications(@Param('recipientid') id: string) {
     const { notificationsCount, recipientId } =
       await this.countRecipientNotificationService.execute(id);
 
